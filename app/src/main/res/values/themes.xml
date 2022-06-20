@@ -43,6 +43,8 @@
         <!-- Customize your theme here. -->
 
         <item name="fontFamily">@font/rubik</item>
+        <item name="popupMenuBackground">@drawable/custom_popup_background</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">

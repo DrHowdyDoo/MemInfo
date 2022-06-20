@@ -1,6 +1,7 @@
 package com.drhowdydoo.meminfo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,13 +11,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.drhowdydoo.meminfo.adapter.RecyclerViewAdapter;
 import com.drhowdydoo.meminfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.meminfo.model.DisplayHeader;
 import com.drhowdydoo.meminfo.model.MemInfo;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Object> list;
     private LinkedHashMap<String,Long> map;
+    private MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +59,23 @@ public class MainActivity extends AppCompatActivity {
 
         swipeRefreshLayout = binding.swipeRefreshLayout;
         recyclerView = binding.recyclerview;
+        toolbar = binding.toolbar;
         list = new ArrayList<>();
 
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(progressBackgroundColor);
         swipeRefreshLayout.setColorSchemeColors(progressIndicatorColor);
+
+        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this)
+                .setTitle("About")
+                        .setMessage("MemInfo App is an open source app. It shows the memory info fetched from the meminfo file created and stored by the kernel in the memory.");
+
+        toolbar.setOnMenuItemClickListener(item -> {
+            if(item.getItemId() == R.id.about){
+                 materialAlertDialogBuilder.show();
+                return true;
+            }
+            else return false;
+        });
 
         map = new LinkedHashMap<>();
 
