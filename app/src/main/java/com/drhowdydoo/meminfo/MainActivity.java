@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this)
                 .setTitle("About")
-                        .setMessage("MemInfo App is an open source app. It shows the memory info fetched from the meminfo file created and stored by the kernel in the memory.");
+                        .setMessage("MemInfo App is an open source app. It shows the memory info fetched from the meminfo file created and stored by the kernel in the memory.\n\n Developed By \n DrHowdyDoo \n drhowdydoo@gmail.com");
 
         toolbar.setOnMenuItemClickListener(item -> {
             if(item.getItemId() == R.id.about){
