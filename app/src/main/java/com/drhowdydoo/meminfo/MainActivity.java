@@ -3,7 +3,9 @@ package com.drhowdydoo.meminfo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
@@ -12,6 +14,8 @@ import com.drhowdydoo.meminfo.adapter.RecyclerViewAdapter;
 import com.drhowdydoo.meminfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.meminfo.model.DisplayHeader;
 import com.drhowdydoo.meminfo.model.MemInfo;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.MaterialColors;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -27,24 +31,58 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ArrayList<Object> list;
+    private LinkedHashMap<String,Long> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (DynamicColors.isDynamicColorAvailable()) DynamicColors.applyToActivityIfAvailable(this);
+
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        int progressBackgroundColor = MaterialColors.getColor(this, com.google.android.material.R.attr.colorBackgroundFloating,Color.WHITE);
+        int progressIndicatorColor = MaterialColors.getColor(this, com.google.android.material.R.attr.colorPrimary,Color.BLACK);
+
+        swipeRefreshLayout = binding.swipeRefreshLayout;
         recyclerView = binding.recyclerview;
         list = new ArrayList<>();
 
-        String line;
-        RandomAccessFile reader;
-        LinkedHashMap<String,Long> map = new LinkedHashMap<>();
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(progressBackgroundColor);
+        swipeRefreshLayout.setColorSchemeColors(progressIndicatorColor);
 
+        map = new LinkedHashMap<>();
+
+        readProc();
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            map.clear();
+            list.clear();
+            readProc();
+            recyclerViewAdapter.updateList(list);
+            swipeRefreshLayout.setRefreshing(false);
+        });
+
+
+        recyclerViewAdapter = new RecyclerViewAdapter(list,this);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+    }
+
+    private String format(Long sizeBytes){
+        return Formatter.formatFileSize(this,sizeBytes);
+    }
+
+    private void readProc(){
         try {
+            String line;
             long totalMem = 0L,availMem = 0L,usedMem ;
-            reader = new RandomAccessFile("/proc/meminfo", "r");
+            RandomAccessFile reader = new RandomAccessFile("/proc/meminfo", "r");
             while ((line = reader.readLine()) != null) {
                 String[] entry = line.split(":");
                 map.put(entry[0],Long.parseLong(entry[1].substring(0, entry[1].length() - 2).trim()) * 1000);
@@ -55,14 +93,14 @@ public class MainActivity extends AppCompatActivity {
             usedMem = totalMem - availMem;
             int memTrack = totalMem != 0 ? (int) (((double) usedMem / totalMem) * 100) : 0;
 
-            DisplayHeader displayHeader = new DisplayHeader(format(totalMem),format(usedMem),format(availMem),memTrack);
+            DisplayHeader displayHeader = new DisplayHeader(format(totalMem) ,format(usedMem) + " used",format(availMem) + " free",memTrack);
             list.add(displayHeader);
 
             map.forEach((k,v) -> {
                 if(k.equalsIgnoreCase("Buffers") || k.equalsIgnoreCase("Active")
                         || k.equalsIgnoreCase("Unevictable") || k.equalsIgnoreCase("SwapTotal") || k.equalsIgnoreCase("Dirty")
-                || k.equalsIgnoreCase("Shmem") || k.equalsIgnoreCase("KernelStack") ||
-                k.equalsIgnoreCase("VmallocTotal") || k.equalsIgnoreCase("GPUTotalUsed")) {
+                        || k.equalsIgnoreCase("Shmem") || k.equalsIgnoreCase("KernelStack") ||
+                        k.equalsIgnoreCase("VmallocTotal") || k.equalsIgnoreCase("GPUTotalUsed")) {
 
                     MemInfo memInfo = new MemInfo("","");
                     list.add(memInfo);
@@ -75,19 +113,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        Log.d("TEST", "onCreate: " + list.size());
-
-
-        recyclerViewAdapter = new RecyclerViewAdapter(list,this);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-    }
-
-    private String format(Long sizeBytes){
-        return Formatter.formatFileSize(this,sizeBytes);
     }
 
 

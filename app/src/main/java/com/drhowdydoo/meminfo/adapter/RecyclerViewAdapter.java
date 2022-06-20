@@ -2,16 +2,17 @@ package com.drhowdydoo.meminfo.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.drhowdydoo.meminfo.databinding.RecyclerViewHeaderLayoutBinding;
 import com.drhowdydoo.meminfo.databinding.RecyclerViewItemLayoutBinding;
 import com.drhowdydoo.meminfo.model.DisplayHeader;
 import com.drhowdydoo.meminfo.model.MemInfo;
+import com.drhowdydoo.meminfo.util.MyDiffUtil;
 import com.drhowdydoo.meminfo.viewholder.HeaderViewHolder;
 import com.drhowdydoo.meminfo.viewholder.ItemViewHolder;
 
@@ -74,5 +75,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+
+    public void updateList(ArrayList<Object> newList){
+        MyDiffUtil myDiffUtil = new MyDiffUtil(dataList,newList);
+        androidx.recyclerview.widget.DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(myDiffUtil);
+        dataList.clear();
+        dataList.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
     }
 }
