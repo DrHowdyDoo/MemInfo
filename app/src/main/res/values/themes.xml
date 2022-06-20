@@ -44,4 +44,11 @@
 
         <item name="fontFamily">@font/rubik</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
+        <item name="postSplashScreenTheme">@style/Theme.MemInfo</item>
+    </style>
+
 </resources>

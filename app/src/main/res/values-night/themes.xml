@@ -44,4 +44,12 @@
         <!-- Customize your theme here. -->
         <item name="fontFamily">@font/rubik</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/purple_neutral_10</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
+        <item name="postSplashScreenTheme">@style/Theme.MemInfo</item>
+    </style>
+
+
 </resources>
