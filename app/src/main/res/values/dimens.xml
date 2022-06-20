@@ -4,6 +4,13 @@
     <dimen name="margin_narrow">6dp</dimen>
     <dimen name="margin_normal">8dp</dimen>
     <dimen name="margin_moderate">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_xlarge">42dp</dimen>
+    <dimen name="margin_xxlarge">52dp</dimen>
+
+
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_narrow">6dp</dimen>
     <dimen name="padding_normal">8dp</dimen>
     <dimen name="padding_moderate">16dp</dimen>
     <dimen name="padding_large">32dp</dimen>
