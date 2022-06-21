@@ -35,6 +35,9 @@
         <item name="colorOnSurfaceVariant">@color/purple_neutral_variant_30</item>
 
         <item name="colorOutline">@color/purple_neutral_variant_50</item>
+
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >@android:color/transparent</item>
         <item name="android:navigationBarColor">?android:attr/colorBackground</item>
