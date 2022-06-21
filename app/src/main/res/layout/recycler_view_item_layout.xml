@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/img_bullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_moderate"
+        android:src="@drawable/ic_dots"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_label_key"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txt_label_key" />
 
     <TextView
         android:id="@+id/txt_label_key"
@@ -11,12 +20,12 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/padding_moderate"
         android:text="MemAvailable"
-        android:gravity="start"
+        android:gravity="start|center_vertical"
         app:layout_constrainedWidth="true"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        android:textStyle="bold"
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:fontFamily="@font/rubik_medium"
         app:layout_constraintEnd_toStartOf="@+id/txt_label_value"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/img_bullet"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView

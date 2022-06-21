@@ -2,6 +2,7 @@ package com.drhowdydoo.meminfo.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -67,7 +68,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             MemInfo mi = (MemInfo) dataList.get(position);
             itemViewHolder.getTxtAttribute().setText(mi.getAttribute());
             itemViewHolder.getTxtValue().setText(mi.getValue());
-
+            if(mi.isShowIcon()) itemViewHolder.getImg_bullet().setVisibility(View.VISIBLE);
+            else itemViewHolder.getImg_bullet().setVisibility(View.INVISIBLE);
         }
 
     }

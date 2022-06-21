@@ -1,7 +1,6 @@
 package com.drhowdydoo.meminfo;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +11,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.Formatter;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 
 import com.drhowdydoo.meminfo.adapter.RecyclerViewAdapter;
@@ -29,9 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
@@ -70,24 +64,22 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(progressBackgroundColor);
         swipeRefreshLayout.setColorSchemeColors(progressIndicatorColor);
 
-        AboutDialogLayoutBinding aboutDialogLayoutBinding = AboutDialogLayoutBinding.inflate(getLayoutInflater());
 
-        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this)
-                .setView(aboutDialogLayoutBinding.getRoot());
-
-        Button btn = aboutDialogLayoutBinding.btnKnowMore;
-
-        btn.setOnClickListener(view -> {
-            Uri uri =   Uri.parse("https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s2-proc-meminfo");
-            startActivity(new Intent(Intent.ACTION_VIEW, uri));
-        });
 
         toolbar.setOnMenuItemClickListener(item -> {
             if(item.getItemId() == R.id.about){
-                 materialAlertDialogBuilder.show();
-                return true;
+                AboutDialogLayoutBinding aboutDialogLayoutBinding = AboutDialogLayoutBinding.inflate(getLayoutInflater());
+
+                 new MaterialAlertDialogBuilder(this).setView(aboutDialogLayoutBinding.getRoot()).show();
+
+                Button btn = aboutDialogLayoutBinding.btnKnowMore;
+
+                btn.setOnClickListener(view -> {
+                    Uri uri =   Uri.parse("https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s2-proc-meminfo");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                });
             }
-            else return false;
+            return true;
         });
 
         map = new LinkedHashMap<>();
@@ -139,10 +131,10 @@ public class MainActivity extends AppCompatActivity {
                         || k.equalsIgnoreCase("Shmem") || k.equalsIgnoreCase("KernelStack") ||
                         k.equalsIgnoreCase("VmallocTotal") || k.equalsIgnoreCase("GPUTotalUsed")) {
 
-                    MemInfo memInfo = new MemInfo("","");
+                    MemInfo memInfo = new MemInfo("","", false);
                     list.add(memInfo);
                 }
-                MemInfo memInfo = new MemInfo(k,format(v));
+                MemInfo memInfo = new MemInfo(k,format(v), true);
                 list.add(memInfo);
             });
 
