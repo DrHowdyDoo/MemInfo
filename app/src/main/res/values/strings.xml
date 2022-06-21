@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">MemInfo</string>
     <string name="about">About</string>
+    <string name="about_content_1">MemInfo is an open source app, also available on github. The app does not collect any type of data and is completely safe.</string>
+    <string name="about_content_2_heading">What it does ?</string>
+    <string name="about_content_2_body">The app shows the memory info fetched from the meminfo file created by the system kernel.\nThe Size shown is in SI unit (1000B = 1KB)</string>
+    <string name="developed_by">Developed By</string>
+    <string name="drhowdydoo">DrHowdyDoo\ndrhowdydoo@gmail.com</string>
+    <string name="know_more">Know more</string>
 </resources>

@@ -7,13 +7,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.drhowdydoo.meminfo.adapter.RecyclerViewAdapter;
+import com.drhowdydoo.meminfo.databinding.AboutDialogLayoutBinding;
 import com.drhowdydoo.meminfo.databinding.ActivityMainBinding;
 import com.drhowdydoo.meminfo.model.DisplayHeader;
 import com.drhowdydoo.meminfo.model.MemInfo;
@@ -65,9 +70,17 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(progressBackgroundColor);
         swipeRefreshLayout.setColorSchemeColors(progressIndicatorColor);
 
+        AboutDialogLayoutBinding aboutDialogLayoutBinding = AboutDialogLayoutBinding.inflate(getLayoutInflater());
+
         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(this)
-                .setTitle("About")
-                        .setMessage("MemInfo App is an open source app. It shows the memory info fetched from the meminfo file created and stored by the kernel in the memory.\n\n Developed By \n DrHowdyDoo \n drhowdydoo@gmail.com");
+                .setView(aboutDialogLayoutBinding.getRoot());
+
+        Button btn = aboutDialogLayoutBinding.btnKnowMore;
+
+        btn.setOnClickListener(view -> {
+            Uri uri =   Uri.parse("https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s2-proc-meminfo");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        });
 
         toolbar.setOnMenuItemClickListener(item -> {
             if(item.getItemId() == R.id.about){
