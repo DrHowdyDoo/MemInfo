@@ -26,6 +26,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 
@@ -41,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Object> list;
     private LinkedHashMap<String,Long> map;
     private MaterialToolbar toolbar;
+    private Timer timer;
+
+    private TimerTask timerTask;
+
+    private boolean isTimerRunning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(progressBackgroundColor);
         swipeRefreshLayout.setColorSchemeColors(progressIndicatorColor);
-
-
 
         toolbar.setOnMenuItemClickListener(item -> {
             if(item.getItemId() == R.id.about){
@@ -94,12 +99,15 @@ public class MainActivity extends AppCompatActivity {
             swipeRefreshLayout.setRefreshing(false);
         });
 
-
         recyclerViewAdapter = new RecyclerViewAdapter(list,this);
+        recyclerViewAdapter.setHasStableIds(true);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setItemAnimator(null);
         new FastScrollerBuilder(recyclerView).useMd2Style().build();
+
+        setUpScheduler();
 
     }
 
@@ -145,4 +153,48 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private void setUpScheduler(){
+
+        timer = new Timer();
+        timerTask = getTask();
+        timer.schedule(timerTask, 0, 5000);
+        isTimerRunning = true;
+    }
+
+    private TimerTask getTask(){
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                map.clear();
+                list.clear();
+                readProc();
+                recyclerViewAdapter.updateList(list);
+            }
+        };
+        return task;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timerTask.cancel();
+        timer.purge();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timerTask.cancel();
+        timer.purge();
+        isTimerRunning = false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isTimerRunning) {
+            timerTask = getTask();
+            timer.schedule(timerTask, 0, 5000);
+        }
+    }
 }

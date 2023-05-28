@@ -70,6 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             itemViewHolder.getTxtValue().setText(mi.getValue());
             if(mi.isShowIcon()) itemViewHolder.getImg_bullet().setVisibility(View.VISIBLE);
             else itemViewHolder.getImg_bullet().setVisibility(View.INVISIBLE);
+
         }
 
     }
@@ -77,6 +78,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return dataList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     public void updateList(ArrayList<Object> newList){
